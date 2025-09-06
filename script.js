@@ -16,6 +16,9 @@ class Piano {
         this.currentOctave = 4;
         this.baseOctave = 1; // Starting octave for key mappings
         
+        // Initialize audio context in constructor
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
         this.keyMap = {
             // Lower Octave (Z-M)
             'z': 'C3', 'x': 'D3', 'c': 'E3', 'v': 'F3',
@@ -41,10 +44,15 @@ class Piano {
     }
 
     init() {
-        // Initialize audio context
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.buffers = new Map();
         this.loadSounds();
+
+        // Add click handler to resume audio context
+        document.addEventListener('click', () => {
+            if (this.audioContext.state === 'suspended') {
+                this.audioContext.resume();
+            }
+        }, { once: true });
 
         // Event listeners
         this.setupEventListeners();
@@ -120,7 +128,6 @@ class Piano {
             'J': `B${octave+2}`
         };
     }
-    }
 
     async loadSound(note) {
         try {
@@ -166,14 +173,14 @@ class Piano {
 
     handleKeyDown(e) {
         if (e.repeat) return;
-        const note = this.keyMap[e.key.toLowerCase()];
+        const note = this.keyMap[e.key];  // Remove toLowerCase() to handle uppercase keys
         if (note) {
             this.playNote(note);
         }
     }
 
     handleKeyUp(e) {
-        const note = this.keyMap[e.key.toLowerCase()];
+        const note = this.keyMap[e.key];  // Remove toLowerCase() to handle uppercase keys
         if (note) {
             this.stopNote(note);
         }
@@ -181,7 +188,15 @@ class Piano {
 
     playNote(note) {
         const key = Array.from(this.keys).find(k => k.dataset.note === note);
-        if (!key || !this.buffers.has(note)) return;
+        if (!key || !this.buffers.has(note)) {
+            console.log('Note not found:', note, 'Available notes:', Array.from(this.buffers.keys()));
+            return;
+        }
+
+        // Ensure audio context is running
+        if (this.audioContext.state === 'suspended') {
+            this.audioContext.resume();
+        }
 
         // Add visual feedback
         key.classList.add('active', 'pressed');
