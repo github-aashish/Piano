@@ -1,0 +1,206 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(45deg, #1a1a1a, #4a4a4a);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #fff;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.controls {
+    margin-bottom: 30px;
+}
+
+.control-btn {
+    background: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.1s, background 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.control-btn:hover {
+    background: #f0f0f0;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.control-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.octave-controls {
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+#currentOctave {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.control-btn i {
+    margin-right: 5px;
+}
+
+.piano {
+    background: #1a1a1a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.keys {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.key {
+    position: relative;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.white {
+    width: 60px;
+    height: 180px;
+    background: #fff;
+    border: 1px solid #000;
+    border-radius: 0 0 5px 5px;
+}
+
+.black {
+    position: absolute;
+    width: 40px;
+    height: 120px;
+    background: #000;
+    border-radius: 0 0 3px 3px;
+    z-index: 2;
+}
+
+/* Position black keys - Lower Octave */
+.black:nth-child(22) { left: 40px; }
+.black:nth-child(23) { left: 100px; }
+.black:nth-child(24) { left: 220px; }
+.black:nth-child(25) { left: 280px; }
+.black:nth-child(26) { left: 340px; }
+
+/* Position black keys - Middle Octave */
+.black:nth-child(27) { left: 460px; }
+.black:nth-child(28) { left: 520px; }
+.black:nth-child(29) { left: 640px; }
+.black:nth-child(30) { left: 700px; }
+.black:nth-child(31) { left: 760px; }
+
+/* Position black keys - Upper Octave */
+.black:nth-child(32) { left: 880px; }
+.black:nth-child(33) { left: 940px; }
+.black:nth-child(34) { left: 1060px; }
+.black:nth-child(35) { left: 1120px; }
+.black:nth-child(36) { left: 1180px; }
+
+.key.active {
+    background: #7cb9e8;
+}
+
+.key.white.active {
+    background: #b4d9f8;
+}
+
+.keyboard-map {
+    color: #fff;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Animation for key press */
+@keyframes keyPress {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+}
+
+.key.pressed {
+    animation: keyPress 0.1s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .white {
+        width: 45px;
+        height: 140px;
+    }
+
+    .black {
+        width: 30px;
+        height: 90px;
+    }
+
+    /* Adjust black key positions for mobile */
+    .black:nth-child(9) { left: 30px; }
+    .black:nth-child(10) { left: 75px; }
+    .black:nth-child(11) { left: 165px; }
+    .black:nth-child(12) { left: 210px; }
+    .black:nth-child(13) { left: 255px; }
+
+    .control-btn {
+        padding: 8px 16px;
+        margin: 5px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Recording animation */
+@keyframes recording {
+    0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+}
+
+.recording {
+    animation: recording 2s infinite;
+}
